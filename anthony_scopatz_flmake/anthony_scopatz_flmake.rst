@@ -1,14 +1,15 @@
-:author: Anthony Scopatz
-:email: scopatz@flash.uchicago.edu
-:institution: The FLASH Center for Computational Science, The University of Chicago
-
 ----------------------------------------------------------
 Total Recall: flmake and the Quest for Reproducibility
 ----------------------------------------------------------
 
-.. class:: abstract
+:date: 2012-01-02
+:author: Anthony Scopatz
+:email: kapil@ccs.neu.edu
+:email: scopatz@flash.uchicago.edu
+:institution: The FLASH Center for Computational Science, The University of Chicago
+:tags: FLASH, reproducibility
 
-    FLASH is a high-performance computing (HPC) multi-physics code which is used to perform
+:summary: FLASH is a high-performance computing (HPC) multi-physics code which is used to perform
     astrophysical and high-energy density physics simulations.  
     To run a FLASH simulation, the user must go through three basic steps: setup, build, and
     execution.  Canonically, each of these tasks are independently handled by the user.
@@ -19,10 +20,6 @@ Total Recall: flmake and the Quest for Reproducibility
     The process of writing flmake opens many questions to what precisely is meant 
     by reproducibility in computational science.  While posed here, many of these 
     questions remain unanswered.
-
-.. class:: keywords
-
-   FLASH, reproducibility
 
 Introduction
 ------------
@@ -127,10 +124,6 @@ After creating a project directory, the simulation source files must be assemble
 the flmake setup command.  This is analogous to executing the traditional setup script. 
 For example, to run the classic Sedov problem:
 
-.. raw:: latex
-
-    \vspace{1em}
-
 .. code-block:: sh
 
         ~/proj $ flmake setup Sedov -auto
@@ -138,10 +131,6 @@ For example, to run the classic Sedov problem:
         SUCCESS
         ~/proj $ ls
         flash_desc.json  setup/
-
-.. raw:: latex
-
-    \vspace{1em}
 
 This command creates symbolic links to the the FLASH source files in the ``setup/`` directory.
 Using the normal FLASH setup script, all of these files must live within 
@@ -163,9 +152,6 @@ simulations.  Thus ``simulations/`` effectively aliases ``source/Simulation/Simu
 Continuing with the previous Sedov example the following directories are 
 searched in order of precedence for simulation units, if they exist:
 
-.. raw:: latex
-
-    \vspace{1em}
 
 #. ``~/proj/simulations/Sedov/``
 #. ``~/proj/source/Simulation/``
@@ -173,26 +159,15 @@ searched in order of precedence for simulation units, if they exist:
 #. ``${FLASH_SRC_DIR}/source/``
         ``Simulation/SimulationMain/Sedov/``
 
-.. raw:: latex
-
-    \vspace{1em}
 
 Therefore, it is common for a project directory to have the following structure if the 
 project requires many modifications to FLASH that are - at least in the short term - 
 inappropriate for mainline inclusion:
 
-.. raw:: latex
-
-    \vspace{1em}
-
 .. code-block:: sh
 
     ~/proj $ ls
     flash_desc.json  setup/  simulations/  source/
-
-.. raw:: latex
-
-    \vspace{1em}
 
 Logging
 ======================
@@ -220,24 +195,12 @@ be bothered to create meaningful log messages at each step, sensible and default
 are automatically generated.  Still, it is highly recommended that the user provide
 more detailed messages as needed.  *E.g.*:
 
-.. raw:: latex
-
-    \vspace{1em}
-
 .. code-block:: sh
 
     ~/proj $ flmake -m "Run with 600 J laser" run -n 10
 
-.. raw:: latex
-
-    \vspace{1em}
-
 The ``flmake log`` command may then be used to display past log 
 messages:
-
-.. raw:: latex
-
-    \vspace{1em}
 
 .. code-block:: sh
 
@@ -250,11 +213,6 @@ messages:
     Log id: 6b9e1a0f-cfdc-418f-8c50-87f66a63ca82
 
         Run with 600 J laser
-
-.. raw:: latex
-
-    \vspace{1em}
-
 
 The ``flash.log`` file should be added to the version control of the project.  Entries
 in this file are not typically deleted.
@@ -277,16 +235,8 @@ The most important example of using ``flashrc.py`` is that the run and restart
 commands will update the ``flash.par`` file with values from a ``parameters``
 dictionary (or function which returns a dictionary).
 
-.. raw:: latex
-
-    \vspace{1em}
-    \begin{center}
 
 Initial ``flash.par``
-
-.. raw:: latex
-
-    \end{center}
 
 .. code-block:: sh
 
@@ -295,32 +245,16 @@ Initial ``flash.par``
     charLimiting = .true.
     RiemannSolver = "hll"
 
-.. raw:: latex
-
-    \vspace{1em}
-    \begin{center}
-
 Run Control ``flashrc.py``
-
-.. raw:: latex
-
-    \end{center}
 
 .. code-block:: python
 
     parameters = {"slopeLimiter": "mc",
                   "use_flattening": False}
 
-.. raw:: latex
-
-    \vspace{1em}
-    \begin{center}
 
 Final ``flash.par``
 
-.. raw:: latex
-
-    \end{center}
 
 .. code-block:: sh
 
@@ -329,10 +263,6 @@ Final ``flash.par``
     order = 3
     slopeLimiter = "mc"
     use_flattening = .false.
-
-.. raw:: latex
-
-    \vspace{1em}
 
 Description Sidecar Files
 ============================
@@ -379,10 +309,6 @@ above.  A  typical flmake workflow which sets up,
 builds, runs, restarts, and merges a fork of a Sedov simulation is 
 now demonstrated. First, construct the project repository:
 
-.. raw:: latex
-
-    \vspace{1em}
-
 .. code-block:: sh
 
     ~ $ mkdir my_sedov
@@ -398,15 +324,9 @@ now demonstrated. First, construct the project repository:
     ~/my_sedov $ git add .
     ~/my_sedov $ git commit -m "My Sedov project"
 
-.. raw:: latex
-
-    \vspace{1em}
 
 Next, create and run the simulation:
 
-.. raw:: latex
-
-    \vspace{1em}
 
 .. code-block:: sh
 
@@ -420,9 +340,6 @@ Next, create and run the simulation:
                         merge run-fc6c9029 first_run
     ~/my_sedov $ flmake clean 1
 
-.. raw:: latex
-
-    \vspace{1em}
 
 
 Why Reproducibility is Important
@@ -503,17 +420,10 @@ of a FLASH simulation.  This takes a description file (e.g. ``flash_desc.json``)
 the FLASH source and project repositories and replays the setup, build, and run commands 
 originally executed.  It has the following usage string:
 
-.. raw:: latex
-
-    \vspace{1em}
-
 .. code-block:: sh
 
     flmake reproduce [options] <flash_descr>
 
-.. raw:: latex
-
-    \vspace{1em}
 
 For each command, reproduction works by cloning both source and project repositories at a 
 the point in history when they were run into temporary directories.  Then any local 
@@ -521,23 +431,20 @@ modifications which were present (and not under version control) are loaded from
 description file and applied to the cloned repository.  It then copies the original run control 
 file to the cloned repositories and performs any command-specific modifications needed.  Finally,
 it executes the appropriate command *from the cloned repository* using the original 
-arguments provided on the command line.  Figure :ref:`reproduce` presents a flow sheet 
+arguments provided on the command line.  The following figure presents a flow sheet 
 of this process.
 
-.. figure:: reproduce_flowchart.png
+.. figure:: images/reproduce_flowchart.png
     :align: center
     :figclass: bht
 
-    The reproduce command workflow. :label:`reproduce`
+    The reproduce command workflow.
 
 
 Thus the ``flmake reproduce`` recreates the 
 original simulation using the original commands (and not the versions currently present).
 The reproduce command has the following limitations:
 
-.. raw:: latex
-
-    \vspace{1em}
 
 #. Source directory must be version controlled,
 #. Project directory must be version controlled,
@@ -545,9 +452,6 @@ The reproduce command has the following limitations:
    FLASH datafiles, 
 #. and the FLASH executable must not be modified between build and run steps.
 
-.. raw:: latex
-
-    \vspace{1em}
 
 The above restrictions enforce that the run is not considered 
 reproducible if at any point FLASH depends on externalities or alterations
@@ -577,18 +481,12 @@ away from the underlying technology (or absence of technology).
 For flmake, the following
 operations define version control in the context of reproducibility:
 
-.. raw:: latex
-
-    \vspace{1em}
 
 * info, 
 * checkout or clone, 
 * diff, 
 * and patch.
 
-.. raw:: latex
-
-    \vspace{1em}
 
 The info operation provides version control information that points to the 
 current state of the repository.  For all source control management schemes
@@ -718,10 +616,6 @@ measure until diacomputational science is realized [BROWN]_.
 However, as Brown admits (see comments), the delineation between replication and 
 reproduction is fuzzy.  Consider these questions which have no clear answers:
 
-.. raw:: latex
-
-    \vspace{1em}
-
 * Are bit-identical results needed for replication?
 * How much of the environment must be reinstated for replication
   versus reproduction?
@@ -729,10 +623,6 @@ reproduction is fuzzy.  Consider these questions which have no clear answers:
 * What precisely is meant by \`the environment' and how large is it?
 * For codes depending on stochastic processes, is reusing the same 
   random seed replication or reproduction?
-
-.. raw:: latex
-
-    \vspace{1em}
 
 Without justifiable answers to the above, ad hoc definitions have 
 governed the use of replicability and reproducibility.
