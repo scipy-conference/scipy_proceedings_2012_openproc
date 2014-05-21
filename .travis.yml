@@ -1,0 +1,19 @@
+branches:
+  only:
+  - master
+language: python
+python:
+- 2.7
+script:
+    - ../buildbot/build.sh scipy-conference/scipy_proceedings_2012
+notifications:
+  email:
+    on_success: always
+    on_failure: always
+before_install:
+  - git clone --recursive https://github.com/scipy-conference/openproceedings-buildbot-scipy.git -b 2012 ../buildbot
+  - source ../buildbot/prepare.sh
+after_success: bash ../buildbot/deploy.sh proceedings/2012
+env:
+  global:
+    - secure: GNx7pJDSDh9h2MXXlxDKSNGe6DySuU+NufUw56g8OOVhlS3lsaUKPHDqPTFbZGxZBvFqy4YbM4ClkdlDL6O5ElWHGJHtTbRnUVcPOhQaMgtL5GzxuiqiaC6oDaAQfN4ZW0vmZBMe+P+SovHskHQEbnIYkCq/8scTkxWd1F5xCpE=
